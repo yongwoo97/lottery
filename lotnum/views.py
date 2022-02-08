@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 from django.db.models import Max
+from django.http import JsonResponse
 from datetime import datetime
 from .models import LotteryNumber
 from .serializer import NumSerializer
@@ -25,7 +26,7 @@ def num(request):
         if last_number['number'] == now:
             win_number = LotteryNumber.objects.get(number=now)
             serializer = NumSerializer(win_number)
-            return Response(serializer.data)
+            return JsonResponse(serializer.data)
         else:
             try:
                 new_number = numget(now)
