@@ -59,9 +59,11 @@ def nums(request):
 
         last_number = LotteryNumber.objects.aggregate(number=Max('number'))
         if last_number['number'] == now:
-            win_numbers = LotteryNumber.objects.all().order_by('-number')[:7]
-            serializer = NumSerializer(win_numbers)
-            return JsonResponse(serializer.data)
+            win_numbers = LotteryNumber.objects.all().order_by('-number')
+            if len(win_numbers) > 7:
+                win_numbers = win_numbers[:7]
+            serializer = NumSerializer(win_numbers, many=True)
+            return Response(serializer.data)
 
         else:
             try:
@@ -78,9 +80,11 @@ def nums(request):
                     n7=new_number['n7']
                 )
                 win_number.save()
-                win_numbers = LotteryNumber.objects.all().order_by('-number')[:7]
-                serializer = NumSerializer(win_numbers)
-                return JsonResponse(serializer.data)
+                win_numbers = LotteryNumber.objects.all().order_by('-number')
+                if len(win_numbers) > 7:
+                    win_numbers = win_numbers[:7]
+                serializer = NumSerializer(win_numbers, many=True)
+                return Response(serializer.data)
             except:
                 return Response({'message': "does not exists"}, status=404)
 
