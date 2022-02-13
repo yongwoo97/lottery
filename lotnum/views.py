@@ -46,6 +46,7 @@ def num(request):
             except:
                 return Response({'message': "does not exists"}, status=404)
 
+#수정사항
 @api_view(['GET', ])
 @permission_classes((AllowAny,))
 def nums(request):
